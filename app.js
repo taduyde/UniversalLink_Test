@@ -1,10 +1,16 @@
 const http = require('http');
 const port=process.env.PORT || 5000
-const server = http.createServer((req, res) => {
-res.statusCode = 200;
-res.setHeader('Content-Type', 'text/html');
-res.end('<h1>Hello World</h1>');
+const fs = require('fs');
+var express = require('express');
+var app = express();
+app.get('/', function(req, res, next) {
+     res.set('Content-Type', 'application/json');
+     res.status(200).send("Hello world");
 });
-server.listen(port,() => {
-console.log(`Server running at port `+port);
+app.get('/apple-app-site-association', function(req, res, next) {
+	var aasa = fs.readFileSync(__dirname + '/apple-app-site-association');
+     res.set('Content-Type', 'application/json');
+     res.status(200).send(aasa);
 });
+// Express creates a server for you and starts it
+var server = app.listen(port);
